@@ -6,6 +6,6 @@ defmodule AntColony.NestServer do
   end
 
   def init(_args) do
-    {:ok, %{name: "colony name", food: 200, nest_size: 16}}
+    {:ok, %{name: "colony name", food: 200, nest_size: 10}}
   end
 end

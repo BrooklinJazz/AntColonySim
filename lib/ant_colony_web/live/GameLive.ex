@@ -3,8 +3,7 @@ defmodule AntColonyWeb.GameLive do
   # the line below would be: use MyAppWeb, :live_view
   use Surface.LiveView
   alias AntColonyWeb.Components.{Workers, Queen, Nest}
-  alias AntColony.{WorkerServer, QueenServer, NestServer}
-  @topic "deployments"
+  alias AntColony.{ColonyServer}
 
   def render(assigns) do
     ~F"""
@@ -15,15 +14,13 @@ defmodule AntColonyWeb.GameLive do
   end
 
   def mount(_params, _session, socket) do
-    {:ok, nest_server} = NestServer.start_link([])
-    {:ok, worker_server} = WorkerServer.start_link([])
-    {:ok, queen_server} = QueenServer.start_link([])
+    {:ok, colony} = ColonyServer.start_link([])
 
     {:ok,
      assign(socket, %{
-       queen: :sys.get_state(queen_server),
-       nest: :sys.get_state(nest_server),
-       workers: [:sys.get_state(worker_server)]
+       queen: ColonyServer.stats(colony, :queen),
+       nest: ColonyServer.stats(colony, :nest),
+       workers: ColonyServer.stats(colony, :workers)
      })}
   end
 end
