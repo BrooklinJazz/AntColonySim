@@ -16,7 +16,7 @@ defmodule AntColonyWeb.Router do
 
   scope "/", AntColonyWeb do
     pipe_through :browser
-    live "/", ColonyLive
+    live "/", GameLive
     # get "/", PageController, :index
   end
 

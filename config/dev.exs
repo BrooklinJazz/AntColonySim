@@ -59,7 +59,8 @@ config :ant_colony, AntColonyWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/ant_colony_web/(live|views)/.*(ex)$",
-      ~r"lib/ant_colony_web/templates/.*(eex)$"
+      ~r"lib/ant_colony_web/templates/.*(eex)$",
+      ~r"lib/my_app_web/live/.*(sface)$"
     ]
   ]
 
