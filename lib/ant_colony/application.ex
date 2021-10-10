@@ -15,9 +15,9 @@ defmodule AntColony.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: AntColony.PubSub},
       # Start the Endpoint (http/https)
-      AntColonyWeb.Endpoint
+      AntColonyWeb.Endpoint,
       # Start a worker by calling: AntColony.Worker.start_link(arg)
-      # {AntColony.Worker, arg}
+      # {AntColony.ColonyServer, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
