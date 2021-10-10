@@ -17,20 +17,28 @@ defmodule AntColonyWeb.GameLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    # {:ok, colony} = ColonyServer.start_link([])
-    colony = ColonyServer
+    if connected?(socket), do: :timer.send_interval(1, self(), :update)
 
     {:ok,
      assign(socket, %{
-       queen: ColonyServer.stats(colony, :queen),
-       nest: ColonyServer.stats(colony, :nest),
-       workers: ColonyServer.stats(colony, :workers)
+       queen: ColonyServer.stats(ColonyServer, :queen),
+       nest: ColonyServer.stats(ColonyServer, :nest),
+       workers: ColonyServer.stats(ColonyServer, :workers)
+     })}
+  end
+
+  def handle_info(:update, socket) do
+    {:noreply,
+     assign(socket, %{
+       queen: ColonyServer.stats(ColonyServer, :queen),
+       nest: ColonyServer.stats(ColonyServer, :nest),
+       workers: ColonyServer.stats(ColonyServer, :workers)
      })}
   end
 
   @impl true
   def handle_event("add", _value, socket) do
-    ColonyServer.make_worker(ColonyServer)
+    ColonyServer.make_worker(ColonyServer, %{name: "Test", cost: 5000})
     {:noreply, socket}
   end
 end

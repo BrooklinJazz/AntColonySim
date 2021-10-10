@@ -9,23 +9,27 @@ defmodule AntColony.ColonyServer do
     GenServer.start_link(__MODULE__, [init_args], name: __MODULE__)
   end
 
+  # spawn a single process to test, avoiding concurrency issues caused by a singleton process.
+  def start_link(init_args, :test) do
+    GenServer.start_link(__MODULE__, [init_args])
+  end
+
   @impl true
   def init(_args) do
     {:ok, nest} = NestServer.start_link([])
-    {:ok, worker} = WorkerServer.start_link([])
     {:ok, queen} = QueenServer.start_link([])
 
-    {:ok, %{nest: nest, queen: queen, workers: [worker]}}
+    {:ok, %{nest: nest, queen: queen, workers: []}}
   end
 
   @impl true
-  def handle_cast(:make_worker, state) do
-    {:ok, worker} = WorkerServer.start_link([])
+  def handle_cast({:make_worker, opts}, state) do
+    {:ok, worker} = WorkerServer.start_link(opts)
     {:noreply, %{state | workers: [worker | state.workers]}}
   end
 
-  def make_worker(colony_pid) do
-    GenServer.cast(queen(colony_pid), {:make_worker, colony_pid})
+  def make_worker(colony_pid, worker) do
+    GenServer.cast(queen(colony_pid), {:make_worker, colony_pid, worker})
   end
 
   @spec stats(pid(), atom()) :: map() | list()

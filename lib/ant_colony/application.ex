@@ -17,7 +17,7 @@ defmodule AntColony.Application do
       # Start the Endpoint (http/https)
       AntColonyWeb.Endpoint,
       # Start a worker by calling: AntColony.Worker.start_link(arg)
-      # {AntColony.ColonyServer, []}
+      {AntColony.ColonyServer, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

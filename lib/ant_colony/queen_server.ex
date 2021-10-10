@@ -10,14 +10,12 @@ defmodule AntColony.QueenServer do
     {:ok, %{name: "Queen name", action: nil}}
   end
 
-  def handle_cast({:make_worker, colony_pid}, state) do
-    IO.inspect("MAKE WORKER", label: __MODULE__)
-
+  def handle_cast({:make_worker, colony_pid, worker}, state) do
     {:ok, action} =
       GenServer.start_link(ActionServer, %{
         name: "make worker",
-        cost: 100,
-        callback: fn -> GenServer.cast(colony_pid, :make_worker) end
+        cost: worker.cost,
+        callback: fn -> GenServer.cast(colony_pid, {:make_worker, worker}) end
       })
 
     {:noreply, %{state | action: action}}
